@@ -6,13 +6,13 @@ module.exports = function(grunt) {
     jade: {
       compile: {
         expand: true,
-        cwd: 'assets/jade/',
+        cwd: 'jade/',
         src: '*.jade',
         dest: '',
         ext: '.html',
         options: {
-          // min化しない
-          pretty: false
+          // min化しない ... true
+          pretty: true
         }
       }
     },
@@ -38,7 +38,7 @@ module.exports = function(grunt) {
       },
       compile: {
         files: {
-          'assets/js/jquery.localizemin.js': 'assets/js/jquery.localize.js'
+          'assets/js/jquery.localize.min.js': 'assets/js/jquery.localize.js'
         }
       }
     },
