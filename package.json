@@ -1,0 +1,28 @@
+{
+  "name": "jQuery.localize",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/chaika-design/jQuery.localize.git"
+  },
+  "author": "Chaika",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chaika-design/jQuery.localize/issues"
+  },
+  "homepage": "https://github.com/chaika-design/jQuery.localize",
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-jade": "~0.11.0",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-contrib-jshint": "~0.8.0",
+    "grunt-minjson": "~0.1.1",
+    "grunt-cli": "~0.1.13"
+  }
+}
