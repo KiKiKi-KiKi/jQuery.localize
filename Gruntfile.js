@@ -34,7 +34,9 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        banner: '/*!\n * jQuery.localize <%= grunt.template.today("dd-mm-yyyy") %>\n * https://github.com/chaika-design/jQuery.localize\n */\n'
+        banner: '/*!\n * jQuery.localize <%= grunt.template.today("dd-mm-yyyy") %>\n * https://github.com/chaika-design/jQuery.localize\n */\n',
+        // 難読化
+        mangle: true
       },
       compile: {
         files: {
@@ -46,7 +48,7 @@ module.exports = function(grunt) {
     minjson: {
       compile: {
         files: {
-          "lang/ja/lang.json": ['assets/lang/ja/*.json']
+          "lang/ja/ja.json": ['assets/lang/ja/*.json']
         }
       }
     },
@@ -65,7 +67,7 @@ module.exports = function(grunt) {
         // 監視ファイル
         files: ['assets/js/*.js'],
         // 実行タスク
-        tasks: ['js'],
+        tasks: ['jshint', 'uglify:compile'],
         options: {
           nospawn: true
         }
@@ -87,9 +89,6 @@ module.exports = function(grunt) {
       grunt.loadNpmTasks(taskName);
     }
   }
-
-  // JS のタスクをセット
-  grunt.registerTask('js', ['jshint', 'uglify:compile']);
 
   grunt.registerTask('default', 'watch');
 };
