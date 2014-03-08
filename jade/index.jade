@@ -1,0 +1,76 @@
+- var lang = 'ja'
+doctype html
+html(lang= lang)
+  head
+    meta(charset="utf-8")
+    title jQuery.localize
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+    script(src="assets/js/jquery.localize.js")
+  body
+    header#header
+      h1 jQuery.localize.js
+    div#main
+      h2.heading destroyer
+      dl
+        dt.item
+          strong.label(data-pkg="ja.class.name.Fubuki") TypeIII
+          button.transrate(value="transrate") transrate
+        dd
+          ul
+            li.item
+              label.label(data-pkg="ja.class.Fubuki.TypeIII") Hibiki
+              button.transrate(value="transrate") transrate
+            li.item
+              label.label(data-pkg="ja.class.Fubuki.TypeIII") Akatuki
+              button.transrate(value="transrate") transrate
+            li.item
+              label.label(data-pkg="ja.class.Fubuki.TypeIII") Ikazuchi
+              button.transrate(value="transrate") transrate
+            li.item
+              label.label(data-pkg="ja.class.Fubuki.TypeIII") Inazuma
+              button.transrate(value="transrate") transrate
+        dt.item
+          strong.label(data-pkg="ja.class.name") Shiratsuyu
+          button.transrate(value="transrate") transrate
+        dd
+          ul
+            li.item
+              label.label(data-pkg="ja.class.Shiratsuyu") Shiratsuyu
+              button.transrate(value="transrate") transrate
+            li.item
+              label.label(data-pkg="ja.class.Shiratsuyu") Shigure
+              button.transrate(value="transrate") transrate
+            li.item
+              label.label(data-pkg="ja.class.Shiratsuyu") Murasame
+              button.transrate(value="transrate") transrate
+            li.item
+              label.label(data-pkg="ja.class.Shiratsuyu") Yudachi
+              button.transrate(value="transrate") transrate
+
+    footer#footer
+      a(href="https://github.com/chaika-design/jQuery.localize", target="_blank") github
+    script.
+      $(function() {
+        var $main = $('#main');
+        var localize = new Localize({
+          language: 'ja',
+          skipLanguage: 'en',
+          pathPrefix: 'lang',
+          callBack: function(v) {
+            console.log(v);
+          }
+        });
+        localize.load(['ja'], function() {
+          var $heading = $main.find('.heading');
+          $heading.text( localize.transrate( $heading.text(), 'ja' ) );
+          $main.on('click', '.transrate', function(evt) {
+            var $btn = jQuery(evt.currentTarget);
+            var $label = $btn.closest('.item').find('.label');
+            var pkg = $label.data('pkg');
+            var word =  $label.text();
+            $label.text( localize.transrate( word, pkg ) );
+            $btn.remove();
+            return false;
+          });
+        });
+      });

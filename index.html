@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <title>jQuery.localize</title>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="assets/js/jquery.localize.js"></script>
+  </head>
+  <body>
+    <header id="header">
+      <h1>jQuery.localize.js</h1>
+    </header>
+    <div id="main">
+      <h2 class="heading">destroyer</h2>
+      <dl>
+        <dt class="item"><strong data-pkg="ja.class.name.Fubuki" class="label">TypeIII</strong>
+          <button value="transrate" class="transrate">transrate</button>
+        </dt>
+        <dd>
+          <ul>
+            <li class="item">
+              <label data-pkg="ja.class.Fubuki.TypeIII" class="label">Hibiki</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+            <li class="item">
+              <label data-pkg="ja.class.Fubuki.TypeIII" class="label">Akatuki</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+            <li class="item">
+              <label data-pkg="ja.class.Fubuki.TypeIII" class="label">Ikazuchi</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+            <li class="item">
+              <label data-pkg="ja.class.Fubuki.TypeIII" class="label">Inazuma</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+          </ul>
+        </dd>
+        <dt class="item"><strong data-pkg="ja.class.name" class="label">Shiratsuyu</strong>
+          <button value="transrate" class="transrate">transrate</button>
+        </dt>
+        <dd>
+          <ul>
+            <li class="item">
+              <label data-pkg="ja.class.Shiratsuyu" class="label">Shiratsuyu</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+            <li class="item">
+              <label data-pkg="ja.class.Shiratsuyu" class="label">Shigure</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+            <li class="item">
+              <label data-pkg="ja.class.Shiratsuyu" class="label">Murasame</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+            <li class="item">
+              <label data-pkg="ja.class.Shiratsuyu" class="label">Yudachi</label>
+              <button value="transrate" class="transrate">transrate</button>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+    <footer id="footer"><a href="https://github.com/chaika-design/jQuery.localize" target="_blank">github</a></footer>
+    <script>
+      $(function() {
+        var $main = $('#main');
+        var localize = new Localize({
+          language: 'ja',
+          skipLanguage: 'en',
+          pathPrefix: 'lang',
+          callBack: function(v) {
+            console.log(v);
+          }
+        });
+        localize.load(['ja'], function() {
+          var $heading = $main.find('.heading');
+          $heading.text( localize.transrate( $heading.text(), 'ja' ) );
+          $main.on('click', '.transrate', function(evt) {
+            var $btn = jQuery(evt.currentTarget);
+            var $label = $btn.closest('.item').find('.label');
+            var pkg = $label.data('pkg');
+            var word =  $label.text();
+            $label.text( localize.transrate( word, pkg ) );
+            $btn.remove();
+            return false;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
