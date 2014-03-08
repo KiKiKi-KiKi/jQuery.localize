@@ -7,11 +7,6 @@ var Localize = function(options) {
   this.init(options);
 };
 jQuery.extend(Localize.prototype, {
-  lang: 'en',
-  defLang: null,
-  cache: {},
-  loadedFunc: null,
-
   options: {
     language: null,
     skipLanguage: null,
@@ -88,7 +83,7 @@ jQuery.extend(Localize.prototype, {
     return value;
   },
 
-  _dispatchEvent: function(callBack, value) {
+  _dispatch: function(callBack, value) {
     if( typeof(callBack) === 'function' ) {
       callBack(value);
     }
@@ -102,12 +97,9 @@ jQuery.extend(Localize.prototype, {
       self.options = jQuery.extend({}, self.options, options);
     }
     o = self.options;
-    if(o.language) {
-      self.lang = self._normaliseLang(o.language);
-    }
-    if(o.skipLanguage) {
-      self.defLang = self._normaliseLang(o.skipLanguage);
-    }
+    self.cache = {};
+    self.lang = o.language? self._normaliseLang(o.language) : 'en';
+    self.defLang = o.skipLanguage? self._normaliseLang(o.skipLanguage) : null;
   },
 
   // set language
@@ -153,7 +145,7 @@ jQuery.extend(Localize.prototype, {
         // use Cache
         value = self._getValueForKey(word, pkg, self.cache);
         value = value || word;
-        self._dispatchEvent(callBack, value);
+        self._dispatch(callBack, value);
         return value;
       } else {
         // Load Language
@@ -162,16 +154,16 @@ jQuery.extend(Localize.prototype, {
           // SUCCESS
           self._saveCahe(file, data);
           value = self._getValueForKey(word, pkg, self.cache);
-          self._dispatchEvent(callBack, value || word);
+          self._dispatch(callBack, value || word);
         })
         .fail(function(jqXHR, textStatus, errorThrown) {
           // ERROR
           console.log(jqXHR, textStatus, errorThrown);
-          self._dispatchEvent(callBack, word);
+          self._dispatch(callBack, word);
         });
       }
     } else {
-      self._dispatchEvent(callBack, word);
+      self._dispatch(callBack, word);
       return word;
     }
   }

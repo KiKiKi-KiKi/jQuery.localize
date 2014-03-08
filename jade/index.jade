@@ -60,7 +60,7 @@ html(lang= lang)
             console.log(v);
           }
         });
-        localize.load(['ja'], function() {
+        localize.load('ja', function() {
           var $heading = $main.find('.heading');
           $heading.text( localize.transrate( $heading.text(), 'ja' ) );
           $main.on('click', '.transrate', function(evt) {
