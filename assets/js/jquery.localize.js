@@ -1,3 +1,8 @@
+if(!Array.isArray) {
+  Array.isArray = function (vArg) {
+    return Object.prototype.toString.call(vArg) === "[object Array]";
+  };
+}
 var Localize = function(options) {
   this.init(options);
 };
@@ -5,6 +10,7 @@ jQuery.extend(Localize.prototype, {
   lang: 'en',
   defLang: null,
   cache: {},
+  loadedFunc: null,
 
   options: {
     language: null,
@@ -29,11 +35,34 @@ jQuery.extend(Localize.prototype, {
       this.cache[this.lang] = {};
     }
     jQuery.extend(this.cache[this.lang], d);
-    console.log(this.cache);
     return this;
   },
 
-  _loadLanguage: function(file) {
+  _loadLanguages: function(files, n) {
+    var self = this, file;
+    if(files[n]) {
+      file = files[n].split('.')[0];
+      if(!(self.cache[self.lang] && self.cache[self.lang][file])) {
+        self._loadLanFile(file)
+        .done(function(data) {
+          self._saveCahe(file, data);
+          self._loadLanguages(files, n+=1);
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+          console.log(jqXHR, textStatus, errorThrown);
+          self._loadLanguages(files, n+=1);
+        });
+      } else {
+        self._loadLanguages(files, n+=1);
+      }
+    } else {
+      if( typeof(self.loadedFunc) === 'function' ) {
+        self.loadedFunc();
+      }
+    }
+  },
+
+  _loadLanFile: function(file) {
     var filePath = this.options.pathPrefix + '/' + this.lang + '/' + file + '.json';
     var defer = jQuery.Deferred();
     jQuery.ajax({
@@ -81,6 +110,37 @@ jQuery.extend(Localize.prototype, {
     }
   },
 
+  // set language
+  language: function(lang) {
+    if(lang) {
+      this.lang = this._normaliseLang(lang);
+    }
+  },
+  skipLanguage: function(lang) {
+    if(lang) {
+      this.defLang = this._normaliseLang(lang);
+    }
+  },
+
+  // load lang file
+  load: function(files, func) {
+    var self = this;
+    if(!Array.isArray(files)) {
+      files = [files];
+    }
+    this.loadedFunc = func;
+    this._loadLanguages(files, 0);
+  },
+
+  // reset Cache
+  reset: function(lang) {
+    if(this.cache[lang]) {
+      delete this.cache[lang];
+    } else if(!lang) {
+      this.cache = {};
+    }
+  },
+
   // transrate
   transrate: function(word, pkg, callBack) {
     var self = this, o = self.options, file, value;
@@ -97,7 +157,7 @@ jQuery.extend(Localize.prototype, {
         return value;
       } else {
         // Load Language
-        this._loadLanguage(file)
+        this._loadLanFile(file)
         .done(function(data) {
           // SUCCESS
           self._saveCahe(file, data);
@@ -113,27 +173,6 @@ jQuery.extend(Localize.prototype, {
     } else {
       self._dispatchEvent(callBack, word);
       return word;
-    }
-  },
-
-  // set language
-  language: function(lang) {
-    if(lang) {
-      this.lang = this._normaliseLang(lang);
-    }
-  },
-  skipLanguage: function(lang) {
-    if(lang) {
-      this.defLang = this._normaliseLang(lang);
-    }
-  },
-
-  // reset Cache
-  reset: function(lang) {
-    if(this.cache[lang]) {
-      delete this.cache[lang];
-    } else if(!lang) {
-      this.cache = {};
     }
   }
 
